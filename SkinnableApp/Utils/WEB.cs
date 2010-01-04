@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Diagnostics;
 using System.Net;
 using System.Text;
@@ -174,9 +176,74 @@ namespace SIinformer.Utils
             thread.Start(url);
         }
 
-        public static void SendHttpGETRequest(string Url)
+        public static string SendHttpPOSTRequest(string Url, Dictionary<string, string> postData)
         {
+            WebRequest request = WebRequest.Create(Url);
+            try
+            {
+                if (_proxySetting.UseProxy)
+                {
+                    IPAddress test;
+                    if (!IPAddress.TryParse(_proxySetting.Address, out test))
+                        throw new ArgumentException("Некорректный адрес прокси сервера");
+                    request.Proxy = _proxySetting.UseAuthentification
+                                       ? new WebProxy(
+                                             new Uri("http://" + _proxySetting.Address + ":" + _proxySetting.Port),
+                                             false,
+                                             new string[0],
+                                             new NetworkCredential(_proxySetting.UserName, _proxySetting.Password))
+                                       : new WebProxy(
+                                             new Uri("http://" + _proxySetting.Address + ":" + _proxySetting.Port));
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Add(ex.StackTrace, false, true);
+                _logger.Add(ex.Message, false, true);
+                _logger.Add("Ошибка конструктора прокси", false, true);
+            }
 
+            string postDataString = string.Empty;
+            foreach(KeyValuePair<string, string> item in postData)
+            {
+                if (postDataString.Length != 0)
+                    postDataString += "&";
+                postDataString += item.Key + "=" + item.Value;
+            }
+
+            request.Method = "POST";
+            request.ContentType = "application/x-www-form-urlencoded";
+            request.ContentLength = postDataString.Length;
+            using (Stream writeStream = request.GetRequestStream())
+            {
+                UTF8Encoding encoding = new UTF8Encoding();
+                byte[] bytes = encoding.GetBytes(postDataString);
+                writeStream.Write(bytes, 0, bytes.Length);
+            }
+
+            string result = string.Empty;
+            try
+            {
+                
+                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
+                {
+                    using (Stream responseStream = response.GetResponseStream())
+                    {
+                        using (StreamReader readStream = new StreamReader(responseStream, Encoding.UTF8))
+                        {
+                            result = readStream.ReadToEnd();
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                _logger.Add(ex.StackTrace, false, true);
+                _logger.Add(ex.Message, false, true);
+                _logger.Add("Ошибка посылке POST запроса", false, true);
+            }
+            return result;
         }
+
     }
 }
