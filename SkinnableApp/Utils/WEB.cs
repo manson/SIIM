@@ -176,9 +176,10 @@ namespace SIinformer.Utils
             thread.Start(url);
         }
 
-        public static string SendHttpPOSTRequest(string Url, Dictionary<string, string> postData)
+        public static string SendHttpPOSTRequest(string Url, string Referer, Dictionary<string, string> postData)
         {
-            WebRequest request = WebRequest.Create(Url);
+            HttpWebRequest request = HttpWebRequest.Create(Url) as HttpWebRequest;
+
             try
             {
                 if (_proxySetting.UseProxy)
@@ -211,13 +212,23 @@ namespace SIinformer.Utils
                 postDataString += item.Key + "=" + item.Value;
             }
 
+            UTF8Encoding encoding = new UTF8Encoding();
+            byte[] bytes = encoding.GetBytes(postDataString);
+
             request.Method = "POST";
+            request.Timeout = 60000;
+            request.Accept = "image/gif, image/x-xbitmap, image/jpeg, image/pjpeg, application/x-shockwave-flash, application/vnd.ms-excel, application/vnd.ms-powerpoint, application/msword, application/x-ms-application, application/x-ms-xbap, application/vnd.ms-xpsdocument, application/xaml+xml, */*";
+            request.UserAgent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; .NET CLR 2.0.50727; .NET CLR 3.0.04506.648; .NET CLR 3.5.21022; .NET CLR 3.0.4506.2152; .NET CLR 3.5.30729; .NET4.0C; .NET4.0E)";
             request.ContentType = "application/x-www-form-urlencoded";
-            request.ContentLength = postDataString.Length;
+            request.Headers.Add("Accept-Charset", "windows-1251");
+            request.Headers.Add("Accept-Encoding", "gzip, deflate");
+            request.Headers.Add("Accept-Language", "en-us");
+            request.Headers.Add("Pragma", "no-cache");
+            request.Referer = Referer;
+            request.ContentLength = bytes.Length;
+
             using (Stream writeStream = request.GetRequestStream())
             {
-                UTF8Encoding encoding = new UTF8Encoding();
-                byte[] bytes = encoding.GetBytes(postDataString);
                 writeStream.Write(bytes, 0, bytes.Length);
             }
 
@@ -234,13 +245,14 @@ namespace SIinformer.Utils
                             result = readStream.ReadToEnd();
                         }
                     }
+                    response.Close();
                 }
             }
             catch (Exception ex)
             {
                 _logger.Add(ex.StackTrace, false, true);
                 _logger.Add(ex.Message, false, true);
-                _logger.Add("Ошибка посылке POST запроса", false, true);
+                _logger.Add("Ошибка при посылке POST запроса", false, true);
             }
             return result;
         }

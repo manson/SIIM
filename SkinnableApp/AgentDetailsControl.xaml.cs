@@ -11,6 +11,9 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using SIinformer.Logic;
+using SIinformer.Utils;
+
 namespace SkinnableApp
 {
 	public partial class AgentDetailsControl : System.Windows.Controls.UserControl
@@ -24,8 +27,16 @@ namespace SkinnableApp
         private void PostComment_Click(object sender, RoutedEventArgs e)
         {
             Dictionary<string, string> data = new Dictionary<string,string>();
-            data.Add("", "");
-            SIinformer.Utils.WEB.SendHttpPOSTRequest("", data);
+            string link = ((AuthorComment)this.DataContext).Link;
+            data.Add("FILE", link);
+            data.Add("MSGID", "");
+            data.Add("OPERATION", "store_new");
+            data.Add("NAME", "Полосухин Илья Дмитриевич");
+            data.Add("EMAIL", "ilblackdragon@gmail.com");
+            data.Add("URL", "http://zhurnal.lib.ru/p/polosuhin_i_d/");
+            data.Add("TEXT", CommentText.Text);
+            WEB.SendHttpPOSTRequest("http://zhurnal.lib.ru/cgi-bin/comment",
+                "http://zhurnal.lib.ru/cgi-bin/comment?COMMENT=" + link, data);
             // Manual update comment list here!
         }
 	}

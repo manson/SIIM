@@ -154,7 +154,7 @@
                     <Border Margin="5" Grid.Row="1" BorderThickness="1" BorderBrush="LightGray" CornerRadius="5"  Background="WhiteSmoke">
                         <!--StackPanel Orientation="Horizontal"-->
                             <Grid Height="80">
-                                <TextBox VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" MaxLength="8096" Margin="5,5,160,0"></TextBox>
+                                <TextBox Name="CommentText" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" MaxLength="8096" Margin="5,5,160,0"></TextBox>
                                 <!--<Button Margin="10,5,0,5" IsEnabled="False" ToolTip="Не реализовано">Ответить</Button>
                             <Button Margin="10,5,0,5" ToolTip="Написать комментарий" Name="PostComment" Click="PostComment_Click">Написать комментарий</Button>-->
                                 <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" ToolTip="Написать комментарий" Name="PostComment" Click="PostComment_Click" Height="22" Margin="0,0,5,5" Width="150">Написать комментарий</Button>
