@@ -1,0 +1,167 @@
+﻿<UserControl x:Class="SkinnableApp.AgentDetailsControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local ="clr-namespace:SIinformer.Logic"
+             >
+    <UserControl.Resources>
+        <SolidColorBrush x:Key="SelectedBackgroundBrush" Color="#DDD" />
+        <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />
+        <Style x:Key="{x:Type ListBoxItem}" TargetType="ListBoxItem">
+            <Setter Property="SnapsToDevicePixels" Value="true"/>
+            <Setter Property="OverridesDefaultStyle" Value="true"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="ListBoxItem">
+                        <Border Margin="0,5,0,0"
+                          Name="Border"
+                          Padding="2"
+                          SnapsToDevicePixels="true" BorderThickness="1" BorderBrush="Gray" CornerRadius="5">
+                            <ContentPresenter />
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsSelected" Value="true">
+                                <Setter TargetName="Border" Property="Background"
+                    Value="{StaticResource SelectedBackgroundBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="Foreground"
+                    Value="{StaticResource DisabledForegroundBrush}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <DataTemplate x:Key="ListItemsStyle">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition> 
+                    <ColumnDefinition Width="200"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                
+                <StackPanel Grid.Column="1" Grid.RowSpan="2" VerticalAlignment="Top">
+                <Grid >
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <!--Фотография-->
+                        
+                    <Image Height="55" MaxHeight="100" MaxWidth="200" Margin="20" HorizontalAlignment="Center" VerticalAlignment="Center" Source="{Binding CommenterImage}"></Image>
+                        
+                    <!--автор коммента-->
+                    <TextBlock Grid.Row="1" Text="{Binding CommenterName}" FontWeight="Bold" HorizontalAlignment="Center" TextWrapping="Wrap"></TextBlock>
+                    <!--имейл-->
+                    <TextBlock Grid.Row="2" Text="{Binding eMail}"  HorizontalAlignment="Center" TextWrapping="Wrap"></TextBlock>
+                    <!--адрес-->
+                    <TextBlock Grid.Row="3" Text="{Binding CommenterURL}"  HorizontalAlignment="Center" TextWrapping="Wrap"></TextBlock>                    
+                    <!--дата коммента-->
+                    <TextBlock Grid.Row="4" Text="{Binding Date}"  HorizontalAlignment="Center" FontStyle="Italic" Margin="0,5,0,0"></TextBlock>
+                </Grid>
+                </StackPanel>
+                <!--Текст коммента-->
+                <!--<TextBlock Grid.Column="1" Grid.Row="0" Padding="5" TextWrapping="Wrap" Text="{Binding CommentText}"></TextBlock>-->
+                <ItemsControl Grid.Column="0" Grid.Row="0" x:Name="Collection" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" ItemsSource="{Binding FormattedComment}" >
+                    <ItemsControl.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <StackPanel HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
+                        </ItemsPanelTemplate>
+                    </ItemsControl.ItemsPanel>
+                    <ItemsControl.ItemTemplate>
+                        <DataTemplate DataType="{x:Type local:CommentItem}">
+                            <Grid >
+                                <Border Margin="50,10,10,20" CornerRadius="20" Background="Beige" BorderThickness="1" BorderBrush="Gray" Visibility="{Binding IsQuote}"  >
+                                    <StackPanel>
+                                        <Border CornerRadius="8" HorizontalAlignment="Left" Height="20" Width="50" Margin="20,-10" Visibility="{Binding IsQuote}" Background="Beige" BorderThickness="1" BorderBrush="Gray">
+                                            <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center" Text="Цитата"></TextBlock>
+                                        </Border>
+                                        <TextBlock Margin="20,15,15,10" Text="{Binding Text}" TextWrapping="Wrap"></TextBlock>
+                                    </StackPanel>
+                                </Border>
+                                <TextBlock Margin="10,10,10,20"  Text="{Binding Text}" TextWrapping="Wrap" Canvas.Left="{Binding X}" Canvas.Top="{Binding Y}" Visibility="{Binding NotQuote}"></TextBlock>
+                            </Grid>
+                        </DataTemplate>
+                    </ItemsControl.ItemTemplate>
+                </ItemsControl>
+
+                <!--Номер коммента-->
+                <Border Opacity="0.8" Grid.Column="1" CornerRadius="5" Margin="0,-2,-2,0" Background="LightGray" Width="35" Height="20" VerticalAlignment="Top" HorizontalAlignment="Right">
+                    <TextBlock Text="{Binding Number}" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="Black"></TextBlock>
+                </Border>
+
+            </Grid>            
+            
+        </DataTemplate>
+    </UserControl.Resources>
+    
+    
+        <DockPanel>
+    <Border
+      DockPanel.Dock="Top"
+      Style="{DynamicResource styleContentArea}"
+      >
+      <Grid>
+        <Grid.RowDefinitions>
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="Auto" />
+          <RowDefinition Height="*" />
+        </Grid.RowDefinitions>
+
+        <!-- Имя автора -->
+        <Border Grid.Row="0" Style="{DynamicResource styleContentAreaHeader}">
+          <Grid>
+            <StackPanel Orientation="Horizontal">
+              <TextBlock FontSize="20" Padding="8" VerticalAlignment="Center" Text="{Binding AuthorName}" ></TextBlock>              
+            </StackPanel>
+          </Grid>
+        </Border>
+
+        <!-- AGENT DETAILS GRID (Picture & Info)-->
+
+          <!-- Название произведения -->
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>                
+                    <TextBlock Grid.Column="0" FontSize="18" FontWeight="Bold"  Margin="6,4" Text="{Binding Name}" ></TextBlock>
+                    <TextBlock Grid.Column="1" FontSize="16" Margin="6,4" Text="{Binding Rating}" ></TextBlock>
+               </Grid>
+          
+                <!--список комментариев-->
+                <Grid Grid.Row="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*" />
+                        <RowDefinition Height="Auto" />
+                    </Grid.RowDefinitions>
+                    <!--комментарии-->
+                    <Border Margin="5" Grid.Row="0" BorderThickness="1" BorderBrush="LightGray" CornerRadius="5">
+                        <ListBox ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                                 HorizontalContentAlignment="Stretch" 
+                                 BorderThickness="0" Margin="5" ItemsSource="{Binding Comments}" ItemTemplate="{StaticResource ListItemsStyle}"
+                                 ScrollViewer.CanContentScroll="False"
+                                 >
+                        </ListBox>
+                    </Border>
+                    <!--Комманды-кнопки-->
+                    <Border Margin="5" Grid.Row="1" BorderThickness="1" BorderBrush="LightGray" CornerRadius="5"  Background="WhiteSmoke">
+                        <StackPanel Orientation="Horizontal">
+                            <Button Margin="10,5,0,5" IsEnabled="False" ToolTip="Не реализовано">Ответить</Button>
+                            <Button Margin="10,5,0,5" IsEnabled="False" ToolTip="Не реализовано">Написать коммент</Button>
+                        </StackPanel>
+                    </Border>
+                    
+                </Grid>
+
+     </Grid>
+    </Border>
+  </DockPanel>
+</UserControl>

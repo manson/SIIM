@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Agents>
+  <!-- DAVID GREENE -->
+  <Agent>
+    <Name>
+      <First>David</First>
+      <Last>Greene</Last>
+    </Name>
+    <Photo>.\Resources\Pictures\david_greene.jpg</Photo>
+    <Office>
+      <OfficeName>U.S. Insurance Corp.</OfficeName>
+      <StreetAddress>561 Perfecte St.</StreetAddress>
+      <City>Lawrence</City>
+      <State>KS</State>
+      <ZipCode>66044</ZipCode>
+    </Office>
+  </Agent>
+  
+  <!-- SAMANTHA ABLETON-->
+  <Agent>
+    <Name>
+      <First>Samantha</First>
+      <Last>Ableton</Last>
+    </Name>
+    <Photo>.\Resources\Pictures\samantha_ableton.jpg</Photo>
+    <Office>
+      <OfficeName>Progressive Claims, Inc.</OfficeName>
+      <StreetAddress>99 Candor Ave.</StreetAddress>
+      <City>New Canaan</City>
+      <State>CT</State>
+      <ZipCode>06840</ZipCode>
+    </Office>
+  </Agent>
+  
+  <!-- GINA KINGSLEY -->
+  <Agent>
+    <Name>
+      <First>Gina</First>
+      <Last>Kingsley</Last>
+    </Name>
+    <Photo>.\Resources\Pictures\gina_kingsley.jpg</Photo>
+    <Office>
+      <OfficeName>Progressive Claims, Inc.</OfficeName>
+      <StreetAddress>99 Candor Ave.</StreetAddress>
+      <City>New Canaan</City>
+      <State>CT</State>
+      <ZipCode>06840</ZipCode>
+    </Office>
+  </Agent>
+</Agents>

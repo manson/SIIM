@@ -1,0 +1,62 @@
+<ResourceDictionary
+  xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+  xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+  >
+
+  <ResourceDictionary.MergedDictionaries>
+    <ResourceDictionary Source=".\BaseSkin.xaml" />
+  </ResourceDictionary.MergedDictionaries>
+  
+  <!-- Background Style -->
+  <Style x:Key="styleBackground">
+    <Setter Property="Control.Background">
+      <Setter.Value>
+        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+          <GradientStop Color="WhiteSmoke" Offset="0.1" />
+          <GradientStop Color="#0000af10" Offset="1" />
+        </LinearGradientBrush>
+      </Setter.Value>
+    </Setter>
+  </Style>
+
+  <!-- Banner Style -->
+  <Style x:Key="styleBanner">
+    <Setter Property="StackPanel.Background">
+      <Setter.Value>
+        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+          <LinearGradientBrush.GradientStops>
+            <GradientStop Color="Green" Offset="0.1" />
+            <GradientStop Color="LightGreen" Offset="1" />
+          </LinearGradientBrush.GradientStops>
+        </LinearGradientBrush>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="TextBlock.Foreground" Value="White" />
+  </Style>
+
+  <!-- Content Area Style -->
+  <Style x:Key="styleContentArea" BasedOn="{StaticResource styleContentArea_Base}">
+    <Setter Property="Border.Background">
+      <Setter.Value>
+        <LinearGradientBrush StartPoint="0.5,0" EndPoint="0.5,1">
+          <GradientStop Color="#FFFFFFFF" Offset="0.5" />
+          <GradientStop Color="#FFFFFFEE" Offset="1" />
+        </LinearGradientBrush>
+      </Setter.Value>
+    </Setter>
+    <Setter Property="Border.BorderBrush" Value="#FFA5FFC0" />
+  </Style>
+
+  <!-- Content Area Header Brush -->
+  <LinearGradientBrush x:Key="contentAreaHeaderBrush" StartPoint="0.5,0" EndPoint="0.5,1">
+    <GradientStop Color="#FFFFFFF0" Offset="0.25" />
+    <GradientStop Color="#9966CC22" Offset="1" />
+  </LinearGradientBrush>
+
+  <!-- Content Area Header Style -->
+  <Style x:Key="styleContentAreaHeader" BasedOn="{StaticResource styleContentAreaHeader_Base}">
+    <Setter Property="Border.Background" Value="{StaticResource contentAreaHeaderBrush}" />
+    <Setter Property="TextBlock.Foreground" Value="DarkGreen" />
+  </Style>
+  
+</ResourceDictionary>
