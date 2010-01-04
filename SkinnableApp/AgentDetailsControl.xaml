@@ -1,8 +1,7 @@
 ﻿<UserControl x:Class="SkinnableApp.AgentDetailsControl"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local ="clr-namespace:SIinformer.Logic"
-             >
+    xmlns:local ="clr-namespace:SIinformer.Logic">
     <UserControl.Resources>
         <SolidColorBrush x:Key="SelectedBackgroundBrush" Color="#DDD" />
         <SolidColorBrush x:Key="DisabledForegroundBrush" Color="#888" />
@@ -153,10 +152,14 @@
                     </Border>
                     <!--Комманды-кнопки-->
                     <Border Margin="5" Grid.Row="1" BorderThickness="1" BorderBrush="LightGray" CornerRadius="5"  Background="WhiteSmoke">
-                        <StackPanel Orientation="Horizontal">
-                            <Button Margin="10,5,0,5" IsEnabled="False" ToolTip="Не реализовано">Ответить</Button>
-                            <Button Margin="10,5,0,5" ToolTip="Написать комментарий" Name="PostComment" Click="PostComment_Click">Написать комментарий</Button>
-                        </StackPanel>
+                        <!--StackPanel Orientation="Horizontal"-->
+                            <Grid Height="80">
+                                <TextBox VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" MaxLength="8096" Margin="5,5,160,0"></TextBox>
+                                <!--<Button Margin="10,5,0,5" IsEnabled="False" ToolTip="Не реализовано">Ответить</Button>
+                            <Button Margin="10,5,0,5" ToolTip="Написать комментарий" Name="PostComment" Click="PostComment_Click">Написать комментарий</Button>-->
+                                <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" ToolTip="Написать комментарий" Name="PostComment" Click="PostComment_Click" Height="22" Margin="0,0,5,5" Width="150">Написать комментарий</Button>
+                            </Grid>
+                        <!--/StackPanel-->
                     </Border>
                     
                 </Grid>

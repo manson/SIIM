@@ -23,7 +23,10 @@ namespace SkinnableApp
 
         private void PostComment_Click(object sender, RoutedEventArgs e)
         {
-            //
+            Dictionary<string, string> data = new Dictionary<string,string>();
+            data.Add("", "");
+            SIinformer.Utils.WEB.SendHttpPOSTRequest("", data);
+            // Manual update comment list here!
         }
 	}
 }
