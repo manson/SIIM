@@ -526,6 +526,71 @@ namespace SIinformer.Utils
 
         #endregion
 
+        #region Комментарии
+
+        private string _postCommentLink = "http://zhurnal.lib.ru/cgi-bin/comment";
+        private string _commentsLink = "http://zhurnal.lib.ru/comment/";
+
+        /// <summary>
+        /// Ссылка куда ведёт форма для отправки сообщения
+        /// </summary>
+        public string PostCommentLink
+        {
+            get
+            {
+                return _postCommentLink;
+            }
+        }
+
+        /// <summary>
+        /// Ссылка на корень комментариев.
+        /// Используеться, для получения из авторских ссылок вида http://zhurnal.lib.ru/comment/p/pupkin/asdad строки p/pupkin/asdad
+        /// </summary>
+        public string CommentsLink
+        {
+            get
+            {
+                return _commentsLink;
+            }
+        }
+
+        private string _commentName = "";
+        private string _commentEmail = "";
+
+        /// <summary>
+        /// Имя человека, который вводит комментарии
+        /// </summary>
+        public string CommentName
+        {
+            get
+            {
+                return _commentName;
+            }
+
+            set
+            {
+                _commentName = value;
+            }
+        }
+
+        /// <summary>
+        /// Email человека, который вводит комментарии
+        /// </summary>
+        public string CommentEmail
+        {
+            get
+            {
+                return _commentEmail;
+            }
+
+            set
+            {
+                _commentEmail = value;
+            }
+        }
+
+        #endregion
+
         #region Save-Load
 
         private static string SettingFileName

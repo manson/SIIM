@@ -20,7 +20,7 @@ namespace SkinnableApp
         public AuthorList authors = null;
         public AuthorList Authors { get { return authors;} }
         public Logger _logger;
-        private Setting _setting;
+        public Setting _setting;
         // таймер обновлений. Отрабатывает каждую минуту, но смотрит у каждой ленты свое время
         Timer update_timer = null;
 
