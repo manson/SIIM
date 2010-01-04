@@ -65,12 +65,21 @@ namespace SkinnableApp
                 {
                     MainWindow.mainWindow.InvokeIfRequired(() =>
                     {
-                        update_timer.Stop();
-                        UpdateAllAuthors(false);
-                        update_timer.Interval = 60000; // 1 минута для проверки            
-                        update_timer.Start();
+                        try
+                        {
+                            update_timer.Stop();
+                            UpdateAllAuthors(false);
+                            update_timer.Interval = 60000; // 1 минута для проверки            
+                            update_timer.Start();
+                        }
+                        catch (Exception ex)
+                        {
+                            _logger.Add(ex.StackTrace, false, true);
+                            _logger.Add(ex.Message, false, true);
+                            _logger.Add("Какая то лажа здесь происходит", false, true);
+                        }
                     },
-                    System.Windows.Threading.DispatcherPriority.Background);                    
+                    System.Windows.Threading.DispatcherPriority.Background);
                 };
 
             update_timer.Interval = 1000; // 1 секунда для проверки при запуске
@@ -186,6 +195,11 @@ namespace SkinnableApp
             Image img = new Image();
             MyNotifyIcon.IconSource = bitmap;
 
+        }
+
+        private void Window_Closed(object sender, EventArgs e)
+        {
+            _setting.SaveToXML(authors);
         }
 
 
