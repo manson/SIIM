@@ -150,16 +150,30 @@
                                  >
                         </ListBox>
                     </Border>
-                    <!--Комманды-кнопки-->
-                    <Border Margin="5" Grid.Row="1" BorderThickness="1" BorderBrush="LightGray" CornerRadius="5"  Background="WhiteSmoke" Name="SendCommentBorder" IsEnabled="False">
-                        <Grid Height="100">
-                            <TextBox Name="CommentText" VerticalScrollBarVisibility="Auto" AcceptsReturn="True" AcceptsTab="True" MaxLength="8096" Margin="5,5,160,0"></TextBox>
-                            <Label VerticalAlignment="Top" Height="24" Margin="0,5,117,0" HorizontalAlignment="Right" Width="38">Имя:</Label>
-                            <Label Margin="0,35,108,41" HorizontalAlignment="Right" Width="47">Email:</Label>
-                            <TextBox Name="CommentName" VerticalScrollBarVisibility="Auto" MaxLength="50" Margin="0,5,5,0" Height="24" VerticalAlignment="Top" HorizontalAlignment="Right" Width="100"></TextBox>
-                            <TextBox Name="CommentEmail" VerticalScrollBarVisibility="Auto" MaxLength="100" Margin="0,35,5,41" HorizontalAlignment="Right" Width="100"></TextBox>
-                            <Button VerticalAlignment="Bottom" HorizontalAlignment="Right" ToolTip="Написать комментарий" Name="PostComment" Click="PostComment_Click" Height="22" Margin="0,0,5,5" Width="150">Написать комментарий</Button>
-                        </Grid>
+                    <!--Коментирование-->
+                    <Border Margin="5" Grid.Row="1" BorderThickness="1" BorderBrush="LightGray" CornerRadius="5"  Background="WhiteSmoke"  Name="SendCommentBorder" IsEnabled="False">
+                        <Expander Header="Комментировать" x:Name="commentsExpander" >
+                            <Grid x:Name="commentGrid" Height="200" Background="WhiteSmoke" Margin="-4" >
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                    <RowDefinition Height="*"></RowDefinition>
+                                    <RowDefinition Height="Auto"></RowDefinition>
+                                </Grid.RowDefinitions>
+                                <!--Текст комментария-->
+                                <TextBox Name="CommentText" Grid.Row="1" Margin="2" VerticalScrollBarVisibility="Auto" FontSize="14" AcceptsReturn="True" AcceptsTab="True" MaxLength="8096" BorderThickness="1" BorderBrush="LightGray"></TextBox>
+                                <!--Автор-->
+                                <StackPanel Grid.Row="0" Orientation="Horizontal">
+                                    <Label Margin="5">Имя:</Label>    
+                                    <TextBox Margin="5" Name="CommentName" MaxLength="50" Width="200" BorderThickness="1" BorderBrush="Gray" Height="17" VerticalAlignment="Center"></TextBox>
+                                    <Label Margin="5">Email:</Label>    
+                                    <TextBox Name="CommentEmail" MaxLength="100" Margin="5" Width="200"  BorderThickness="1" BorderBrush="Gray" Height="17" VerticalAlignment="Center"></TextBox>
+                                </StackPanel>
+                                <!--Управление-->
+                                <StackPanel Orientation="Horizontal" Grid.Row="2">
+                                    <Button ToolTip="Отправить комментарий" Name="PostComment" Click="PostComment_Click" Margin="5">Отправить</Button>
+                                </StackPanel>
+                            </Grid>
+                        </Expander>
                     </Border>
 
                 </Grid>

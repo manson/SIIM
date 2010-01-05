@@ -286,7 +286,7 @@ namespace SIinformer.Logic
             if (!url.EndsWith("//")) url = url + "//";
 
             string page = WEB.DownloadPageSilent(url + "indexdate.shtml");
-            if (page != "")
+            if (!string.IsNullOrEmpty(page))
             {
                 Match match = Regex.Match(page, "<img src=(.*?).width");
                 if (match.Success)

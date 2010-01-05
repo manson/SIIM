@@ -62,6 +62,7 @@ namespace SkinnableApp
 									data, MainWindow.mainWindow._setting.PostCommentLink + "?COMMENT=" + link, 
 									"COMMENT=" + MainWindow.mainWindow._setting.CommentCookie);
 			CommentText.Text = "";
+            commentsExpander.IsExpanded = false;
 			((AuthorComment)this.DataContext).UpdateComments(true);
         }
 
