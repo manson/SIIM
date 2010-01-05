@@ -164,8 +164,12 @@ namespace SkinnableApp
         {
             if (this.Visibility == System.Windows.Visibility.Hidden)
             {
-                if (WindowState == WindowState.Minimized) WindowState = WindowState.Normal;
-                if (Visibility != Visibility.Visible) Visibility = Visibility.Visible;                
+				if (WindowState == WindowState.Minimized)
+				{
+					WindowState = WindowState.Maximized;
+					Activate();
+				}
+				if (Visibility != Visibility.Visible) Visibility = Visibility.Visible;                
                 Uri uri = new Uri("pack://application:,,/Resources/Icons/Inactive.ico");
                 BitmapImage bitmap = new BitmapImage(uri);
                 Image img = new Image();
