@@ -556,6 +556,7 @@ namespace SIinformer.Utils
 
         private string _commentName = "";
         private string _commentEmail = "";
+		private string _commentCookie = "";
 
         /// <summary>
         /// Имя человека, который вводит комментарии
@@ -570,6 +571,7 @@ namespace SIinformer.Utils
             set
             {
                 _commentName = value;
+				RaisePropertyChanged("CommentName");
             }
         }
 
@@ -586,10 +588,28 @@ namespace SIinformer.Utils
             set
             {
                 _commentEmail = value;
+				RaisePropertyChanged("CommentEmail");
             }
         }
 
-        #endregion
+		/// <summary>
+		/// Cookie сессии (выдаёться до 2030 года сервером, поэтому первый раз заполняем, потом используем)
+		/// </summary>
+		public string CommentCookie
+		{
+			get
+			{
+				return _commentCookie;
+			}
+
+			set
+			{
+				_commentCookie = value;
+				RaisePropertyChanged("CommentCookie");
+			}
+		}
+
+		#endregion
 
         #region Save-Load
 

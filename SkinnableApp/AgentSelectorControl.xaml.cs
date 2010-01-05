@@ -55,6 +55,8 @@ namespace SkinnableApp
                 DispatcherPriority.Background);
 
             string page = WEB.DownloadPageSilent(url);
+			if (String.IsNullOrEmpty(page))
+				return;
             string reg_matcher = "<small><a href=\"(?<authorUrl>.*?)\">другие произведения.</a></small></h3>";                
             MatchCollection matchs = Regex.Matches(page, reg_matcher, RegexOptions.Singleline);
             if (matchs.Count != 0)

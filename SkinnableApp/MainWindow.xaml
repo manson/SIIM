@@ -14,7 +14,9 @@
   StateChanged="Window_StateChanged"
   Visibility="Hidden"
   Icon="/Resources/Icons/Active.ico"
-  Loaded="Window_Loaded" >
+  Loaded="Window_Loaded"
+  Closed="Window_Closed"
+  >
 
     
     <Grid x:Name="Root" Style="{DynamicResource styleBackground}">
