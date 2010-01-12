@@ -160,7 +160,7 @@
                                     <RowDefinition Height="Auto"></RowDefinition>
                                 </Grid.RowDefinitions>
                                 <!--Текст комментария-->
-                                <TextBox Name="CommentText" Grid.Row="1" Margin="2" VerticalScrollBarVisibility="Auto" FontSize="14" AcceptsReturn="True" AcceptsTab="True" MaxLength="8096" BorderThickness="1" BorderBrush="LightGray"></TextBox>
+                                <TextBox Name="CommentText" Grid.Row="1" Margin="2" TextWrapping="Wrap" VerticalScrollBarVisibility="Auto" FontSize="14" AcceptsReturn="True" AcceptsTab="True" MaxLength="8096" BorderThickness="1" BorderBrush="LightGray"></TextBox>
                                 <!--Автор-->
                                 <StackPanel Grid.Row="0" Orientation="Horizontal">
                                     <Label Margin="5">Имя:</Label>    
