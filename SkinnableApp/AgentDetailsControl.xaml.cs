@@ -36,17 +36,18 @@ namespace SkinnableApp
 				return;
 			MainWindow.mainWindow._setting.CommentName = CommentName.Text;
 			MainWindow.mainWindow._setting.CommentEmail = CommentEmail.Text;
+			MainWindow.mainWindow._setting.CommentPassword = CommentPassword.Text;
 			MainWindow.mainWindow._comments.AddComment(
-				new Comment(((AuthorComment)this.DataContext).Link.Substring(MainWindow.mainWindow._setting.CommentsURL.Length), CommentText.Text));
+				new Comment(((AuthorComment)this.DataContext).Link.Substring(MainWindow.mainWindow._setting.CommentsURL.Length), CommentText.Text, (AuthorComment)this.DataContext));
 			CommentText.Text = "";
             commentsExpander.IsExpanded = false;
-			((AuthorComment)this.DataContext).UpdateComments(true);
         }
 
         private void UserControl_Loaded(object sender, RoutedEventArgs e)
         {
             CommentName.Text = MainWindow.mainWindow._setting.CommentName;
             CommentEmail.Text = MainWindow.mainWindow._setting.CommentEmail;
+			CommentPassword.Text = MainWindow.mainWindow._setting.CommentPassword;
         }
 	}
 }

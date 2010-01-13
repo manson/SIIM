@@ -1,8 +1,11 @@
 ﻿using System;
+using System.IO;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
+using System.Text.RegularExpressions;
+using System.Net;
 
 using SIinformer.Logic;
 using SIinformer.Utils;
@@ -13,11 +16,17 @@ namespace SkinnableApp
 	{
 		public string Location { get; private set; }
 		public string Text { get; private set; }
+		public AuthorComment AuthorComment { get; private set; }
 
 		public Comment(string Location, string Text)
+			: this(Location, Text, null)
+		{ }
+
+		public Comment(string Location, string Text, AuthorComment AuthorComment)
 		{
 			this.Location = Location;
 			this.Text = Text;
+			this.AuthorComment = AuthorComment;
 		}
 	}
 
@@ -26,6 +35,7 @@ namespace SkinnableApp
 		Queue<Comment> queue = new Queue<Comment>();
 		bool IsLogin = false;
 		BackgroundWorker send_worker;
+		string AllCookies;
 
 		public CommentManager()
 		{
@@ -35,7 +45,7 @@ namespace SkinnableApp
 
 		public void AddComment(Comment Comment)
 		{
-			lock(queue)
+			lock (queue)
 			{
 				queue.Enqueue(Comment);
 			}
@@ -48,9 +58,9 @@ namespace SkinnableApp
 			if (!IsLogin)
 				Login();
 			Comment c;
-			while(queue.Count > 0)
+			while (queue.Count > 0)
 			{
-				lock(queue)
+				lock (queue)
 				{
 					c = queue.Dequeue();
 				}
@@ -60,35 +70,67 @@ namespace SkinnableApp
 
 		private void Login()
 		{
-			if (String.IsNullOrEmpty(MainWindow.mainWindow._setting.CommentCookie))
+			// Getting cookie, if there are password
+			//if (string.IsNullOrEmpty(MainWindow.mainWindow._setting.CommentCookie))
+			//{
+			//}
+			// Logination
+			if (!string.IsNullOrEmpty(MainWindow.mainWindow._setting.CommentPassword))
 			{
-				System.Net.HttpWebResponse response = WEB.SendHttpGETRequest(MainWindow.mainWindow._setting.LoginURL);
-				if (response == null)
-					return;
-				if (response.Headers["Set-cookie"] != null) // Этот код стремен. Почему то не работает установка куки у HttpWebResponse
-				{
-					string s = response.Headers["Set-cookie"];
-					MainWindow.mainWindow._setting.CommentCookie = s.Substring(s.IndexOf("=") + 1, s.IndexOf(";") - s.IndexOf("=") - 1);
-				}
+				Dictionary<string, string> data = new Dictionary<string, string>();
+				data.Add("OPERATION", "login");
+				data.Add("DATA0", MainWindow.mainWindow._setting.CommentName);
+				data.Add("DATA1", MainWindow.mainWindow._setting.CommentPassword);
+				HttpWebResponse response = WEB.SendHttpPOSTRequest(MainWindow.mainWindow._setting.LoginURL,
+										data, MainWindow.mainWindow._setting.LoginURL,
+										MainWindow.mainWindow._setting.CommentCookie);
+				AllCookies = response.GetCookies().GetString();
 			}
-
 			IsLogin = true;
 		}
 
 		private void SendComment(Comment Comment)
 		{
+			MainWindow.mainWindow._setting.CommentCookie = "";
+			if (string.IsNullOrEmpty(MainWindow.mainWindow._setting.CommentCookie))
+			{
+				HttpWebResponse response = WEB.SendHttpGETRequest(MainWindow.mainWindow._setting.PostCommentURL + "?COMMENT=" + Comment.Location);
+				MainWindow.mainWindow._setting.CommentCookie = response.GetCookies().GetString();
+			}
+			AllCookies += MainWindow.mainWindow._setting.CommentCookie;
+
 			Dictionary<string, string> data = new Dictionary<string, string>();
 
 			data.Add("FILE", Comment.Location);
 			data.Add("MSGID", "");
 			data.Add("OPERATION", "store_new");
-			data.Add("NAME", MainWindow.mainWindow._setting.CommentName);
-			data.Add("EMAIL", MainWindow.mainWindow._setting.CommentEmail);
-			data.Add("URL", "");
+
+			if (!string.IsNullOrEmpty(MainWindow.mainWindow._setting.CommentPassword))
+			{
+				System.Net.HttpWebResponse response = WEB.SendHttpGETRequest(MainWindow.mainWindow._setting.PostCommentURL + "?COMMENT=" +
+																			 Comment.Location, "", AllCookies);
+				string page = (new StreamReader(response.GetResponseStream(), Encoding.GetEncoding("windows-1251"))).ReadToEnd();
+				Match r = Regex.Match(page, "<input[^>]*name=\"EMAIL\"[^>]*value=\"(?<email>[^>]*?)\"[^>]*>");
+				if (r.Length != 0) { data.Add("EMAIL", r.Groups["email"].Value); }
+				r = Regex.Match(page, "<input[^>]*name=\"NAME\"[^>]*value=\"(?<name>[^>]*?)\"[^>]*>");
+				if (r.Length != 0) { data.Add("NAME", r.Groups["name"].Value); }
+				r = Regex.Match(page, "<input[^>]*name=\"URL\"[^>]*value=\"(?<url>[^>]*?)\"[^>]*>");
+				if (r.Length != 0) { data.Add("URL", r.Groups["url"].Value); }
+			}
+			else
+			{
+				data.Add("NAME", MainWindow.mainWindow._setting.CommentName);
+				data.Add("EMAIL", MainWindow.mainWindow._setting.CommentEmail);
+				data.Add("URL", "");
+			}
 			data.Add("TEXT", Comment.Text);
 			WEB.SendHttpPOSTRequest(MainWindow.mainWindow._setting.PostCommentURL,
 									data, MainWindow.mainWindow._setting.PostCommentURL + "?COMMENT=" + Comment.Location,
-									"COMMENT=" + MainWindow.mainWindow._setting.CommentCookie);
+									AllCookies);
+			if (Comment.AuthorComment != null)
+			{
+				Comment.AuthorComment.UpdateComments(true);
+			}
 		}
 
 	}

@@ -164,10 +164,12 @@
                                 <!--Автор-->
                                 <StackPanel Grid.Row="0" Orientation="Horizontal">
                                     <Label Margin="5">Имя:</Label>    
-                                    <TextBox Margin="5" Name="CommentName" MaxLength="50" Width="200" BorderThickness="1" BorderBrush="Gray" Height="17" VerticalAlignment="Center"></TextBox>
+                                    <TextBox Margin="5" Name="CommentName" MaxLength="50" Width="120" BorderThickness="1" BorderBrush="Gray" Height="17" VerticalAlignment="Center"></TextBox>
                                     <Label Margin="5">Email:</Label>    
-                                    <TextBox Name="CommentEmail" MaxLength="100" Margin="5" Width="200"  BorderThickness="1" BorderBrush="Gray" Height="17" VerticalAlignment="Center"></TextBox>
-                                </StackPanel>
+                                    <TextBox Name="CommentEmail" MaxLength="100" Margin="5" Width="120"  BorderThickness="1" BorderBrush="Gray" Height="17" VerticalAlignment="Center"></TextBox>
+									<Label Margin="5">Password:</Label>
+									<TextBox Name="CommentPassword" MaxLength="100" Margin="5" Width="120"  BorderThickness="1" BorderBrush="Gray" Height="17" VerticalAlignment="Center"></TextBox>
+								</StackPanel>
                                 <!--Управление-->
                                 <StackPanel Orientation="Horizontal" Grid.Row="2">
                                     <Button ToolTip="Отправить комментарий" Name="PostComment" Click="PostComment_Click" Margin="5">Отправить</Button>

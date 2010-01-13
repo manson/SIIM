@@ -6,6 +6,7 @@ using System.Net;
 using System.Web;
 using System.Text;
 using System.Threading;
+using System.Text.RegularExpressions;
 
 namespace SIinformer.Utils
 {
@@ -176,17 +177,24 @@ namespace SIinformer.Utils
 
 		public static HttpWebResponse SendHttpGETRequest(string Url)
 		{
+			return SendHttpGETRequest(Url, null, null);
+		}
+
+		public static HttpWebResponse SendHttpGETRequest(string Url, string Referer, string Cookies)
+		{
 			HttpWebRequest request = HttpWebRequest.Create(Url) as HttpWebRequest;
 			FillProxy(request.Proxy);
 
 			request.Method = "GET";
 			request.Timeout = 60000;
-			SetHttpHeaders(request, null);
+			SetHttpHeaders(request, Referer);
+			if (!string.IsNullOrEmpty(Cookies))
+				request.Headers.Add("Cookie", Cookies);
 
+			HttpWebResponse response = null;
 			try
 			{
-				HttpWebResponse response = (HttpWebResponse)request.GetResponse();
-				return response;
+				response = (HttpWebResponse)request.GetResponse();
 			}
 			catch (Exception ex)
 			{
@@ -194,10 +202,10 @@ namespace SIinformer.Utils
 				_logger.Add(ex.Message, false, true);
 				_logger.Add("Ошибка при посылке GET запроса", false, true);
 			}
-			return null;
+			return response;
 		}
 
-		public static string SendHttpPOSTRequest(string Url, Dictionary<string, string> postData, string Referer, string Cookies)
+		public static HttpWebResponse SendHttpPOSTRequest(string Url, Dictionary<string, string> postData, string Referer, string Cookies)
         {
             HttpWebRequest request = HttpWebRequest.Create(Url) as HttpWebRequest;
 			FillProxy(request.Proxy);
@@ -224,21 +232,10 @@ namespace SIinformer.Utils
                 writeStream.Write(bytes, 0, bytes.Length);
             }
 
-            string result = string.Empty;
+			HttpWebResponse response = null;
             try
             {
-                
-                using (HttpWebResponse response = (HttpWebResponse)request.GetResponse())
-                {
-                    using (Stream responseStream = response.GetResponseStream())
-                    {
-                        using (StreamReader readStream = new StreamReader(responseStream, Encoding.UTF8))
-                        {
-                            result = readStream.ReadToEnd();
-                        }
-                    }
-                    response.Close();
-                }
+				response = (HttpWebResponse)request.GetResponse();
             }
             catch (Exception ex)
             {
@@ -246,8 +243,48 @@ namespace SIinformer.Utils
                 _logger.Add(ex.Message, false, true);
                 _logger.Add("Ошибка при посылке POST запроса", false, true);
             }
-            return result;
+            return response;
         }
+
+
+		/// <summary>
+		/// Метод расширяет класс HttpWebResponse
+		/// Парсит полученные Set-Cookies хедеры и добавляет в список
+		/// </summary>
+		/// <param name="response"></param>
+		/// <returns></returns>
+		public static CookieCollection GetCookies(this HttpWebResponse response)
+		{
+			if (response.Headers["Set-Cookie"] != null)
+			{
+				string cookies = Convert.ToString(response.Headers["Set-Cookie"], System.Globalization.CultureInfo.GetCultureInfo("ru-RU"));
+				string[] lines = cookies.Split(';');
+				string[] fl = lines[0].Split('=');
+				response.Cookies.Add(new Cookie(fl[0], fl[1]));
+				foreach(string line in lines)
+				{
+					if (line.IndexOf(",") > 0)
+					{
+						if (!(line.IndexOf("expires") > 0 && line.IndexOf(',') == line.LastIndexOf(',')))
+						{
+							fl = line.Substring(line.LastIndexOf(",") + 1).Split('=');
+							response.Cookies.Add(new Cookie(fl[0], fl[1]));
+						}
+					}
+				}
+			}
+			return response.Cookies;
+		}
+
+		public static string GetString(this CookieCollection collection)
+		{
+			string result = "";
+			foreach (Cookie c in collection) 
+			{
+				result += c.Name + "=" + c.Value + "; ";
+			}
+			return result;
+		}
 
     }
 }

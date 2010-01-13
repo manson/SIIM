@@ -568,6 +568,7 @@ namespace SIinformer.Utils
 
         private string _commentName = "";
         private string _commentEmail = "";
+		private string _commentPassword = "";
 		private string _commentCookie = "";
 
         /// <summary>
@@ -604,6 +605,23 @@ namespace SIinformer.Utils
             }
         }
 
+		/// <summary>
+		/// Password человека, который вводит комментарии
+		/// </summary>
+		public string CommentPassword
+		{
+			get
+			{
+				return _commentPassword;
+			}
+
+			set
+			{
+				_commentPassword = value;
+				RaisePropertyChanged("CommentPassword");
+			}
+		}
+	
 		/// <summary>
 		/// Cookie сессии (выдаёться до 2030 года сервером, поэтому первый раз заполняем, потом используем)
 		/// </summary>
