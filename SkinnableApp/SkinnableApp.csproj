@@ -153,6 +153,7 @@
       <SubType>Code</SubType>
       <DependentUpon>AgentSelectorControl.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Logic\CommentManager.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>

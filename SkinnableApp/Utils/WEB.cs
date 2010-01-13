@@ -34,29 +34,7 @@ namespace SIinformer.Utils
             int tries = 0;
 
             var client = new WebClient();
-            try
-            {
-                if (_proxySetting.UseProxy)
-                {
-                    IPAddress test;
-                    if (!IPAddress.TryParse(_proxySetting.Address, out test))
-                        throw new ArgumentException("Некорректный адрес прокси сервера");
-                    client.Proxy = _proxySetting.UseAuthentification
-                                       ? new WebProxy(
-                                             new Uri("http://" + _proxySetting.Address + ":" + _proxySetting.Port),
-                                             false,
-                                             new string[0],
-                                             new NetworkCredential(_proxySetting.UserName, _proxySetting.Password))
-                                       : new WebProxy(
-                                             new Uri("http://" + _proxySetting.Address + ":" + _proxySetting.Port));
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.Add(ex.StackTrace, false, true);
-                _logger.Add(ex.Message, false, true);
-                _logger.Add("Ошибка конструктора прокси", false, true);
-            }
+			FillProxy(client.Proxy);
 
             while (tries < 3)
             {
@@ -93,29 +71,7 @@ namespace SIinformer.Utils
             int tries = 0;
 
             var client = new WebClient();
-            try
-            {
-                if (_proxySetting.UseProxy)
-                {
-                    IPAddress test;
-                    if (!IPAddress.TryParse(_proxySetting.Address, out test))
-                        throw new ArgumentException("Некорректный адрес прокси сервера");
-                    client.Proxy = _proxySetting.UseAuthentification
-                                       ? new WebProxy(
-                                             new Uri("http://" + _proxySetting.Address + ":" + _proxySetting.Port),
-                                             false,
-                                             new string[0],
-                                             new NetworkCredential(_proxySetting.UserName, _proxySetting.Password))
-                                       : new WebProxy(
-                                             new Uri("http://" + _proxySetting.Address + ":" + _proxySetting.Port));
-                }
-            }
-            catch (Exception ex)
-            {
-                _logger.Add(ex.StackTrace, false, true);
-                _logger.Add(ex.Message, false, true);
-                _logger.Add("Ошибка конструктора прокси", false, true);
-            }
+			FillProxy(client.Proxy);
 
             while (tries < 3)
             {

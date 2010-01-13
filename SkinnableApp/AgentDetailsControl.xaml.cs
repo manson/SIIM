@@ -35,32 +35,9 @@ namespace SkinnableApp
 			if (this.DataContext == null)
 				return;
 			MainWindow.mainWindow._setting.CommentName = CommentName.Text;
-            MainWindow.mainWindow._setting.CommentEmail = CommentEmail.Text;
-            Dictionary<string, string> data = new Dictionary<string, string>();
-            string link = ((AuthorComment)this.DataContext).Link.Substring(MainWindow.mainWindow._setting.CommentsLink.Length);
-
-			if (String.IsNullOrEmpty(MainWindow.mainWindow._setting.CommentCookie))
-			{
-				System.Net.HttpWebResponse response = WEB.SendHttpGETRequest(MainWindow.mainWindow._setting.PostCommentLink + "?COMMENT=" + link);
-				if (response == null)
-					return;
-				if (response.Headers["Set-cookie"] != null) // Этот код стремен. Почему то не работает установка куки у HttpWebResponse
-				{
-					string s = response.Headers["Set-cookie"];
-					MainWindow.mainWindow._setting.CommentCookie = s.Substring(s.IndexOf("=") + 1, s.IndexOf(";") - s.IndexOf("=") - 1);
-				}
-			}
-
-            data.Add("FILE", link);
-            data.Add("MSGID", "");
-            data.Add("OPERATION", "store_new");
-            data.Add("NAME", MainWindow.mainWindow._setting.CommentName);
-            data.Add("EMAIL", MainWindow.mainWindow._setting.CommentEmail);
-            data.Add("URL", "");
-            data.Add("TEXT", CommentText.Text);
-            WEB.SendHttpPOSTRequest(MainWindow.mainWindow._setting.PostCommentLink,
-									data, MainWindow.mainWindow._setting.PostCommentLink + "?COMMENT=" + link, 
-									"COMMENT=" + MainWindow.mainWindow._setting.CommentCookie);
+			MainWindow.mainWindow._setting.CommentEmail = CommentEmail.Text;
+			MainWindow.mainWindow._comments.AddComment(
+				new Comment(((AuthorComment)this.DataContext).Link.Substring(MainWindow.mainWindow._setting.CommentsURL.Length), CommentText.Text));
 			CommentText.Text = "";
             commentsExpander.IsExpanded = false;
 			((AuthorComment)this.DataContext).UpdateComments(true);

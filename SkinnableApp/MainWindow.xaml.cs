@@ -21,6 +21,7 @@ namespace SkinnableApp
         public AuthorList Authors { get { return authors;} }
         public Logger _logger;
         public Setting _setting;
+		public CommentManager _comments;
         // таймер обновлений. Отрабатывает каждую минуту, но смотрит у каждой ленты свое время
         Timer update_timer = null;
 
@@ -42,6 +43,7 @@ namespace SkinnableApp
             _setting = Setting.LoadFromXml();
             _setting.PropertyChanged += SettingPropertyChanged;
             _logger = new Logger();
+			_comments = new CommentManager();
 
 
 			// Load the default skin.

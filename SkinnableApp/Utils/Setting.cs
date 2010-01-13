@@ -528,17 +528,18 @@ namespace SIinformer.Utils
 
         #region Комментарии
 
-        private string _postCommentLink = "http://zhurnal.lib.ru/cgi-bin/comment";
-        private string _commentsLink = "http://zhurnal.lib.ru/comment/";
+        private string _postCommentURL = "http://zhurnal.lib.ru/cgi-bin/comment";
+        private string _commentsURL = "http://zhurnal.lib.ru/comment/";
+		private string _loginURL = "http://zhurnal.lib.ru/cgi-bin/login";
 
         /// <summary>
         /// Ссылка куда ведёт форма для отправки сообщения
         /// </summary>
-        public string PostCommentLink
+		public string PostCommentURL
         {
             get
             {
-                return _postCommentLink;
+				return _postCommentURL;
             }
         }
 
@@ -546,13 +547,24 @@ namespace SIinformer.Utils
         /// Ссылка на корень комментариев.
         /// Используеться, для получения из авторских ссылок вида http://zhurnal.lib.ru/comment/p/pupkin/asdad строки p/pupkin/asdad
         /// </summary>
-        public string CommentsLink
+		public string CommentsURL
         {
             get
             {
-                return _commentsLink;
+				return _commentsURL;
             }
         }
+
+		/// <summary>
+		/// Ссылка на логинацию.
+		/// </summary>
+		public string LoginURL
+		{
+			get
+			{
+				return _loginURL;
+			}
+		}
 
         private string _commentName = "";
         private string _commentEmail = "";
