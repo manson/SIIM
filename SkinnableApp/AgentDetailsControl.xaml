@@ -152,6 +152,7 @@
                     </Border>
                     <!--Коментирование-->
                     <Border Margin="5" Grid.Row="1" BorderThickness="1" BorderBrush="LightGray" CornerRadius="5"  Background="WhiteSmoke"  Name="SendCommentBorder" IsEnabled="False">
+                        <StackPanel>
                         <Expander Header="Комментировать" x:Name="commentsExpander" >
                             <Grid x:Name="commentGrid" Height="200" Background="WhiteSmoke" Margin="-4" >
                                 <Grid.RowDefinitions>
@@ -167,8 +168,8 @@
                                     <TextBox Margin="5" Name="CommentName" MaxLength="50" Width="120" BorderThickness="1" BorderBrush="Gray" Height="17" VerticalAlignment="Center"></TextBox>
                                     <Label Margin="5">Email:</Label>    
                                     <TextBox Name="CommentEmail" MaxLength="100" Margin="5" Width="120"  BorderThickness="1" BorderBrush="Gray" Height="17" VerticalAlignment="Center"></TextBox>
-									<Label Margin="5">Password:</Label>
-									<TextBox Name="CommentPassword" MaxLength="100" Margin="5" Width="120"  BorderThickness="1" BorderBrush="Gray" Height="17" VerticalAlignment="Center"></TextBox>
+									<Label Margin="5">Пароль:</Label>
+									<PasswordBox Name="CommentPassword"  MaxLength="100" Margin="5" Width="120"  BorderThickness="1" BorderBrush="Gray" Height="17" VerticalAlignment="Center"></PasswordBox>
 								</StackPanel>
                                 <!--Управление-->
                                 <StackPanel Orientation="Horizontal" Grid.Row="2">
@@ -176,6 +177,12 @@
                                 </StackPanel>
                             </Grid>
                         </Expander>
+                            <!--Информация о состоянии отправки-->
+                            <StackPanel Orientation="Horizontal" Name="CommentSendingState">
+                                <Label  Margin="2,0,0,-5" FontSize="8" Content="{Binding CommentsInQueue}"></Label>
+                                <Label  Margin="15,0,0,-5" FontSize="8" Content="{Binding ManagerState}"></Label>
+                            </StackPanel>
+                        </StackPanel>
                     </Border>
 
                 </Grid>

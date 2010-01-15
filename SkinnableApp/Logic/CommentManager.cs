@@ -12,6 +12,9 @@ using SIinformer.Utils;
 
 namespace SkinnableApp
 {
+    /// <summary>
+    /// Хреновое название. Коммент, отправляемый пользователем. Имя пересекается с классом комментов, получаемых с сервера. Но пока оставим.
+    /// </summary>
 	public class Comment
 	{
 		public string Location { get; private set; }
@@ -29,8 +32,11 @@ namespace SkinnableApp
 			this.AuthorComment = AuthorComment;
 		}
 	}
-
-	public class CommentManager
+    /// <summary>
+    /// Менеджер отправки комментариев
+    /// Сделаем BindableObject, чтобы привязаться к количеству неотправленных комментариев в потоке
+    /// </summary>
+    public class CommentManager : BindableObject
 	{
 		Queue<Comment> queue = new Queue<Comment>();
 		bool IsLogin = false;
@@ -41,13 +47,34 @@ namespace SkinnableApp
 		{
 			send_worker = new BackgroundWorker();
 			send_worker.DoWork += new DoWorkEventHandler(send_worker_DoWork);
+            RaisePropertyChanged("CommentsInQueue");
 		}
 
+        public string CommentsInQueue
+        {
+            get
+            {
+                return "Неотправленных комментариев: " + queue.Count.ToString();
+            }
+        }
+
+        private bool sendingComment = false;
+        public string ManagerState
+        {
+            get
+            {
+                return sendingComment? "Производится отсылка...": "";
+            }
+        }
+
+        
+
 		public void AddComment(Comment Comment)
-		{
+		{            
 			lock (queue)
 			{
 				queue.Enqueue(Comment);
+                RaisePropertyChanged("CommentsInQueue"); // событие об изменении кол-ва комментов
 			}
 			if (!send_worker.IsBusy)
 				send_worker.RunWorkerAsync();
@@ -91,10 +118,22 @@ namespace SkinnableApp
 
 		private void SendComment(Comment Comment)
 		{
+            sendingComment = true;
+            RaisePropertyChanged("ManagerState");
 			MainWindow.mainWindow._setting.CommentCookie = "";
 			if (string.IsNullOrEmpty(MainWindow.mainWindow._setting.CommentCookie))
 			{
-				HttpWebResponse response = WEB.SendHttpGETRequest(MainWindow.mainWindow._setting.PostCommentURL + "?COMMENT=" + Comment.Location);
+                int trys = 0; // число попыток
+                HttpWebResponse response = null;
+                while (response == null && trys++ < 3)
+                    response = WEB.SendHttpGETRequest(MainWindow.mainWindow._setting.PostCommentURL + "?COMMENT=" + Comment.Location);
+                if (response == null) // если косяк, возвращаем коммент в пул и выходим
+                {
+                    AddComment(Comment);
+                    sendingComment = false;
+                    RaisePropertyChanged("ManagerState");
+                    return;
+                }
 				MainWindow.mainWindow._setting.CommentCookie = response.GetCookies().GetString();
 			}
 			AllCookies += MainWindow.mainWindow._setting.CommentCookie;
@@ -107,8 +146,18 @@ namespace SkinnableApp
 
 			if (!string.IsNullOrEmpty(MainWindow.mainWindow._setting.CommentPassword))
 			{
-				System.Net.HttpWebResponse response = WEB.SendHttpGETRequest(MainWindow.mainWindow._setting.PostCommentURL + "?COMMENT=" +
+                int trys = 0; // число попыток                
+				System.Net.HttpWebResponse response =null;
+                while (response==null && trys++<3)
+                    response = WEB.SendHttpGETRequest(MainWindow.mainWindow._setting.PostCommentURL + "?COMMENT=" +
 																			 Comment.Location, "", AllCookies);
+                if (response == null) // если косяк, возвращаем коммент в пул и выходим
+                {
+                    AddComment(Comment);
+                    sendingComment = false;
+                    RaisePropertyChanged("ManagerState");
+                    return;
+                }
 				string page = (new StreamReader(response.GetResponseStream(), Encoding.GetEncoding("windows-1251"))).ReadToEnd();
 				Match r = Regex.Match(page, "<input[^>]*name=\"EMAIL\"[^>]*value=\"(?<email>[^>]*?)\"[^>]*>");
 				if (r.Length != 0) { data.Add("EMAIL", r.Groups["email"].Value); }
@@ -127,10 +176,13 @@ namespace SkinnableApp
 			WEB.SendHttpPOSTRequest(MainWindow.mainWindow._setting.PostCommentURL,
 									data, MainWindow.mainWindow._setting.PostCommentURL + "?COMMENT=" + Comment.Location,
 									AllCookies);
+            RaisePropertyChanged("CommentsInQueue"); // событие об изменении кол-ва комментов
 			if (Comment.AuthorComment != null)
 			{
 				Comment.AuthorComment.UpdateComments(true);
 			}
+            sendingComment = false;
+            RaisePropertyChanged("ManagerState");
 		}
 
 	}
