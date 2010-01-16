@@ -214,5 +214,15 @@ namespace SkinnableApp
             Visibility = Visibility.Visible;
             Activate();
         }
+        private void ExitMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void InvertWindowVisibility_Click(object sender, RoutedEventArgs e)
+        {
+            InvertWindowVisibility();
+        }
+
     }
 }
