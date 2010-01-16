@@ -36,8 +36,13 @@
                 </StackPanel>
                 <!--<TextBlock Style="{DynamicResource styleInfoTextNotSelectable}" Margin="15,5,0,0" FontSize="10" Text="Проверяется..." Visibility="{Binding isVisibleUpdating}"/>-->
                 <Image Margin="15,0,0,0"  Source="/Resources/Icons/Active.ico" VerticalAlignment="Center" Visibility="{Binding isVisibleUpdating}"/>
+                <StackPanel.ContextMenu>
+                    <ContextMenu>
+                        <MenuItem Header="Удалить" Click="RemoveAuthorCommentClick"/>
+                        <MenuItem Header="Открыть на Самиздате" Click="OpenWithSiClick"/>
+                    </ContextMenu>
+                </StackPanel.ContextMenu>
             </StackPanel>
-
         </HierarchicalDataTemplate>
 
     </Control.Resources>

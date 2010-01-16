@@ -23,7 +23,9 @@ namespace SkinnableApp
 	{
         public string HeaderText { get { return "Авторы";} }
         BackgroundWorker add_worker = null;
-		public AgentSelectorControl()
+        private AuthorComment _selectedAuthorComments;
+
+	    public AgentSelectorControl()
 		{
 			InitializeComponent();
             add_worker = new BackgroundWorker();
@@ -128,7 +130,11 @@ namespace SkinnableApp
             {
                 MainWindow.GetCommentsDetail().DataContext = e.NewValue;
                 (e.NewValue as AuthorComment).IsNew = false;
-                
+                _selectedAuthorComments = (AuthorComment)e.NewValue;
+            }
+            else
+            {
+                _selectedAuthorComments = null;
             }
         }
 
@@ -138,6 +144,18 @@ namespace SkinnableApp
             if (new_url.Text.Trim() == "") return;
             adding_panel.DataContext = MainWindow.mainWindow._logger;
             add_worker.RunWorkerAsync();
+        }
+
+        private void RemoveAuthorCommentClick(object sender, RoutedEventArgs e)
+        {
+            if (_selectedAuthorComments==null) return;
+            ((AuthorList)DataContext).RemoveAuthorComments(_selectedAuthorComments);
+        }
+
+        private void OpenWithSiClick(object sender, RoutedEventArgs e)
+        {
+            if (_selectedAuthorComments == null) return;
+            WEB.OpenURL(_selectedAuthorComments.Link);
         }
 	}
 }

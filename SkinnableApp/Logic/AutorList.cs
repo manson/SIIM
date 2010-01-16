@@ -241,5 +241,26 @@ namespace SIinformer.Logic
         //    }
         //    return null;
         //}
+
+        internal void RemoveAuthorComments(AuthorComment removedAuthorComments)
+        {
+            for (int i = 0; i < Count; i++)
+            {
+                Author author = this[i];
+                for (int index = 0; index < author.AuthorComments.Count; index++)
+                {
+                    AuthorComment authorComment = author.AuthorComments[index];
+                    if (authorComment == removedAuthorComments)
+                    {
+                        author.AuthorComments.Remove(removedAuthorComments);
+                        if (author.AuthorComments.Count==0)
+                        {
+                            Remove(author);
+                        }
+                        return;
+                    }
+                }
+            }
+        }
     }
 }

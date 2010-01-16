@@ -58,7 +58,6 @@ namespace SkinnableApp
             authors = AuthorList.Load(current_authors_file); ;
             Root.DataContext = Authors;
 
-
             WEB.Init(_setting.ProxySetting, _logger);
             MainWindow.mainWindow = this;
 
@@ -206,8 +205,7 @@ namespace SkinnableApp
         private void Window_Closed(object sender, EventArgs e)
         {
             _setting.SaveToXML(authors);
+            Authors.Save();
         }
-
-
     }
 }
