@@ -208,6 +208,16 @@ namespace SkinnableApp
             _setting.SaveToXML(authors);
         }
 
+        private void ExitMenuItem_Click(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
+
+        private void InvertWindowVisibility_Click(object sender, RoutedEventArgs e)
+        {
+            InvertWindowVisibility();
+        }
+
 
     }
 }

@@ -59,7 +59,15 @@
       x:Name="MyNotifyIcon"
       IconSource="/Resources/Icons/Inactive.ico" 
       LeftClickCommand="{StaticResource OpenCommand}"
-      ToolTipText="Комментатор Самиздата" />
+      ToolTipText="Комментатор Самиздата" >
+            <tb:TaskbarIcon.ContextMenu>
+                <ContextMenu>
+                    <MenuItem Header="Свернуть/развернуть" Click="InvertWindowVisibility_Click"/>
+                    <Separator/>
+                    <MenuItem Header="Выход" Click="ExitMenuItem_Click"/>
+                </ContextMenu>                
+            </tb:TaskbarIcon.ContextMenu>
+        </tb:TaskbarIcon>
 
 
 
