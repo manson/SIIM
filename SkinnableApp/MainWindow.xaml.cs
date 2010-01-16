@@ -25,6 +25,8 @@ namespace SkinnableApp
         // таймер обновлений. Отрабатывает каждую минуту, но смотрит у каждой ленты свое время
         Timer update_timer = null;
 
+        public bool IsInit { get; private set; }
+
         public static bool isUpdating { get; set; }
 
         // временные интервалы обновлений. Последовательно увеличиваются, если комментариев нет
@@ -86,8 +88,9 @@ namespace SkinnableApp
 
             update_timer.Interval = 1000; // 1 секунда для проверки при запуске
             update_timer.Start();
-        }
 
+            IsInit = true;
+        }
 
         public DateTime GetNextUpdateTimeByInterval(int intervalIndex, out int newIntervalIndex)
         {
@@ -147,9 +150,7 @@ namespace SkinnableApp
             Authors.Save();
         }
 
-
         public static MainWindow mainWindow;
-
 
         public static AgentDetailsControl _CommentsDetail;
         public static AgentDetailsControl GetCommentsDetail()
@@ -158,11 +159,12 @@ namespace SkinnableApp
         }
 
         private void Window_Loaded(object sender, RoutedEventArgs e)
-        {            
-            _CommentsDetail = CommentsDetail;            
+        {
+            _CommentsDetail = CommentsDetail;
         }
-        
-        public void InvertWindowVisibility()
+
+
+	    public void InvertWindowVisibility()
         {
             if (this.Visibility == System.Windows.Visibility.Hidden)
             {
@@ -200,7 +202,6 @@ namespace SkinnableApp
             BitmapImage bitmap = new BitmapImage(uri);
             Image img = new Image();
             MyNotifyIcon.IconSource = bitmap;
-
         }
 
         private void Window_Closed(object sender, EventArgs e)
@@ -208,6 +209,11 @@ namespace SkinnableApp
             _setting.SaveToXML(authors);
         }
 
-
+        public void ShowWindow()
+        {
+            WindowState = WindowState.Maximized;
+            Visibility = Visibility.Visible;
+            Activate();
+        }
     }
 }
