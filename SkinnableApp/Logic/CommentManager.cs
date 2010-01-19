@@ -172,8 +172,8 @@ namespace SkinnableApp
 			}
 			data.Add("TEXT", Comment.Text);
 			WEB.SendPOSTRequest(MainWindow.mainWindow._setting.PostCommentURL,
-					    		data, MainWindow.mainWindow._setting.PostCommentURL + "?COMMENT=" + Comment.Location,
-								Cookies);
+					    data, MainWindow.mainWindow._setting.PostCommentURL + "?COMMENT=" + Comment.Location,
+					    Cookies);
             RaisePropertyChanged("CommentsInQueue"); // событие об изменении кол-ва комментов
 			if (Comment.AuthorComment != null)
 			{
