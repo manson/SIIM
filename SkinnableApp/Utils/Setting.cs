@@ -569,7 +569,12 @@ namespace SIinformer.Utils
         private string _commentName = "";
         private string _commentEmail = "";
 		private string _commentPassword = "";
-		private string _commentCookie = "";
+		private string _commentCookieComment = "";
+		private string _commentCookieName = "";
+		private string _commentCookiePassword = "";
+		private string _commentZUIName = "";
+		private string _commentZUIEmail = "";
+		private string _commentZUIUrl = "";
 
         /// <summary>
         /// Имя человека, который вводит комментарии
@@ -625,17 +630,93 @@ namespace SIinformer.Utils
 		/// <summary>
 		/// Cookie сессии (выдаёться до 2030 года сервером, поэтому первый раз заполняем, потом используем)
 		/// </summary>
-		public string CommentCookie
+		public string CommentCookieComment
 		{
 			get
 			{
-				return _commentCookie;
+				return _commentCookieComment;
 			}
 
 			set
 			{
-				_commentCookie = value;
-				RaisePropertyChanged("CommentCookie");
+				_commentCookieComment = value;
+				RaisePropertyChanged("CommentCookieComment");
+			}
+		}
+
+		/// <summary>
+		/// Cookie сессии (выдаёться до 2030 года сервером, поэтому первый раз заполняем, потом используем)
+		/// </summary>
+		public string CommentCookieName
+		{
+			get
+			{
+				return _commentCookieName;
+			}
+
+			set
+			{
+				_commentCookieName = value;
+				RaisePropertyChanged("CommentCookieName");
+			}
+		}
+
+		/// <summary>
+		/// Cookie сессии (выдаёться до 2030 года сервером, поэтому первый раз заполняем, потом используем)
+		/// </summary>
+		public string CommentCookiePassword
+		{
+			get
+			{
+				return _commentCookiePassword;
+			}
+
+			set
+			{
+				_commentCookiePassword = value;
+				RaisePropertyChanged("CommentCookiePassword");
+			}
+		}
+
+		public string CommentZUIName
+		{
+			get
+			{
+				return _commentZUIName;
+			}
+
+			set
+			{
+				_commentZUIName = value;
+				RaisePropertyChanged("CommentZUIName");
+			}
+		}
+
+		public string CommentZUIEmail
+		{
+			get
+			{
+				return _commentZUIEmail;
+			}
+
+			set
+			{
+				_commentZUIEmail = value;
+				RaisePropertyChanged("CommentZUIEmail");
+			}
+		}
+
+		public string CommentZUIUrl
+		{
+			get
+			{
+				return _commentZUIUrl;
+			}
+
+			set
+			{
+				_commentZUIUrl = value;
+				RaisePropertyChanged("CommentZUIUrl");
 			}
 		}
 
