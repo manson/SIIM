@@ -205,6 +205,37 @@ namespace SIinformer.Utils
 			return response;
 		}
 
+        public static byte[] SendPOSTRequest(string Url, Dictionary<string, string> postData, string Referer, string Cookies)
+        {
+            byte[] result = null;
+            try
+            {
+                Encoding e = Encoding.GetEncoding("windows-1251");
+                WebClient client = new WebClient();
+                FillProxy(client.Proxy);
+                SetHttpHeaders(client, Referer);
+                client.Headers["Content-Type"] = "application/x-www-form-urlencoded";
+                client.Headers["Cookie"] = Cookies;
+                string postDataString = string.Empty;
+                foreach (KeyValuePair<string, string> item in postData)
+                {
+                    if (postDataString.Length != 0)
+                        postDataString += "&";
+                    postDataString += HttpUtility.UrlEncode(item.Key, e) + "=" + HttpUtility.UrlEncode(item.Value, e);
+                }
+
+                byte[] bytes = Encoding.ASCII.GetBytes(postDataString);
+                result = client.UploadData(Url, bytes);
+            }
+            catch (Exception ex)
+            {
+                _logger.Add(ex.StackTrace, false, true);
+                _logger.Add(ex.Message, false, true);
+                _logger.Add("Ошибка при посылке POST запроса", false, true);
+            }
+            return result;
+        }
+
 		public static HttpWebResponse SendHttpPOSTRequest(string Url, Dictionary<string, string> postData, string Referer, string Cookies)
         {
             HttpWebRequest request = HttpWebRequest.Create(Url) as HttpWebRequest;
@@ -287,4 +318,5 @@ namespace SIinformer.Utils
 		}
 
     }
+	
 }
