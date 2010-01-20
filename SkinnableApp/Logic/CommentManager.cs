@@ -171,9 +171,21 @@ namespace SkinnableApp
 				data.Add("URL", "");
 			}
 			data.Add("TEXT", Comment.Text);
-			WEB.SendPOSTRequest(MainWindow.mainWindow._setting.PostCommentURL,
+            int attempts = 0; // число попыток
+            byte[] result = null;
+            while (result == null && attempts++ < 3)
+			result = WEB.SendPOSTRequest(MainWindow.mainWindow._setting.PostCommentURL,
 					    data, MainWindow.mainWindow._setting.PostCommentURL + "?COMMENT=" + Comment.Location,
 					    Cookies);
+            // если не удалось отправить, возвращаем в пул
+            if (result == null)
+            {
+                AddComment(Comment);
+                sendingComment = false;
+                RaisePropertyChanged("ManagerState");
+                return;
+            }
+
             RaisePropertyChanged("CommentsInQueue"); // событие об изменении кол-ва комментов
 			if (Comment.AuthorComment != null)
 			{
